@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">网速监控</string>
+    <string name="action_settings">其他</string>
+    <string name="app_introduce">一个监测流量的App。</string>
+    <string name="app_auther">我叫徐远斌</string>
+    <string name="app_auther_weibo">http://weibo.cn/Msteriourswind</string>
+</resources>
