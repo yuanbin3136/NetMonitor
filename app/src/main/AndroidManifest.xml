@@ -2,10 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yuanbin.netmonitor">
 
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -24,11 +25,22 @@
         <activity android:name=".Main2Activity" />
 
         <service
-            android:name=".MyService"
+            android:name=".NetMonitorService"
+            android:description="@string/app_service_des"
             android:enabled="true"
             android:exported="true" />
+        <activity android:name=".AutherActivity" />
 
-        <activity android:name=".AutherActivity"></activity>
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED">
+
+                </action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

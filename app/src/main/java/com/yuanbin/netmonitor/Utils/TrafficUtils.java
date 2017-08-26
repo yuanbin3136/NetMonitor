@@ -207,6 +207,9 @@ public class TrafficUtils {
         }else{
             i = 0;
         }
+        if (i > 999){
+            i = 999;
+        }
         return Math.round(i / ((double)interval_getTraffic / 1000)) + s;
     }
 

@@ -7,18 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.TextView;
 
-import com.yuanbin.netmonitor.Utils.BitmapUtils;
 import com.yuanbin.netmonitor.Utils.L;
+import com.yuanbin.netmonitor.Utils.SPUtils;
 import com.yuanbin.netmonitor.Utils.ServiceUtils;
 import com.yuanbin.netmonitor.Utils.WeakHandler;
-
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,54 +30,68 @@ public class MainActivity extends AppCompatActivity {
         }
     });
 
-    Switch sw_speed_noti;
+    Switch sw_speed_noti,sw_boot;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         L.out("MainActivity onCreate");
 
-        String a ="http://img.jandan.net/news/ ";
-//        new Thread(){
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(3000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-////                one2two();
-//                super.run();
-//            }
-//        }.start();
-        sw_speed_noti  = (Switch) findViewById(R.id.sw_speed_noti);
+        initView();
+        initData();
+        initLis();
+    }
 
-
-        L.out("MyService.class.getName() " + MyService.class.getName());
-        if(ServiceUtils.isServiceRunning(this,MyService.class.getName())){
-            sw_speed_noti.setChecked(true);
-        }
+    private void initLis() {
         sw_speed_noti.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     //startService;
-                    startMyService();
+                    startMonitorService();
                 }else{
                     //stopService
-                    stopMyService();
+                    stopMonitorService();
                 }
+                SPUtils.put(MainActivity.this,SPUtils.SP_MONITOR_MONITORING,isChecked);
+                sw_boot.setEnabled(isChecked);
+            }
+        });
+        sw_boot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SPUtils.put(MainActivity.this,SPUtils.SP_MONITOR_BOOT,isChecked);
             }
         });
     }
 
-    private void startMyService(){
-        Intent intent = new Intent(MainActivity.this,MyService.class);
-        MainActivity.this.startService(intent);
+    private void initData() {
+        //        L.out("NetMonitorService.class.getName() " + NetMonitorService.class.getName());
+        boolean monitoring = (boolean) SPUtils.get(this,SPUtils.SP_MONITOR_MONITORING,false);
+        boolean boot = (boolean) SPUtils.get(this,SPUtils.SP_MONITOR_BOOT,false);
+
+        sw_boot.setChecked(boot);
+        sw_speed_noti.setChecked(monitoring);
+        if (!monitoring){
+            sw_boot.setEnabled(false);
+        }else {
+            if(!ServiceUtils.isServiceRunning(this,NetMonitorService.class.getName())){
+                startMonitorService();
+            }
+        }
+
     }
-    private void stopMyService(){
-        Intent intent = new Intent(MainActivity.this,MyService.class);
-        stopService(intent);
+
+    private void initView() {
+        sw_speed_noti  = (Switch) findViewById(R.id.sw_speed_noti);
+        sw_boot  = (Switch) findViewById(R.id.sw_boot);
+    }
+
+    private void startMonitorService(){
+        ServiceUtils.startMonitorService(this);
+    }
+    private void stopMonitorService(){
+        ServiceUtils.stopMonitorService(this);
     }
 
     private void one2two() {

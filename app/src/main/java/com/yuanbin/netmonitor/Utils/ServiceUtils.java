@@ -2,6 +2,9 @@ package com.yuanbin.netmonitor.Utils;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
+
+import com.yuanbin.netmonitor.NetMonitorService;
 
 import java.util.List;
 
@@ -25,5 +28,15 @@ public class ServiceUtils {
             if (className.equals(info.service.getClassName())) return true;
         }
         return false;
+    }
+
+    public static void startMonitorService(Context context){
+        Intent intent = new Intent(context,NetMonitorService.class);
+        context.startService(intent);
+    }
+
+    public static void stopMonitorService(Context context){
+        Intent intent = new Intent(context,NetMonitorService.class);
+        context.stopService(intent);
     }
 }

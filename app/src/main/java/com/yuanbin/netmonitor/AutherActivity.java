@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.yuanbin.netmonitor.Utils.VersionUtils;
 
+import java.util.HashMap;
+
 public class AutherActivity extends AppCompatActivity {
 
     @Override

@@ -4,4 +4,5 @@
     <string name="app_introduce">一个监测流量的App。</string>
     <string name="app_auther">我叫徐远斌</string>
     <string name="app_auther_weibo">http://weibo.cn/Msteriourswind</string>
+    <string name="app_service_des">用于更新通知栏中速率信息的服务</string>
 </resources>

@@ -20,7 +20,7 @@ import com.yuanbin.netmonitor.Utils.NetUtils;
 import com.yuanbin.netmonitor.Utils.TrafficUtils;
 import com.yuanbin.netmonitor.Utils.WeakHandler;
 
-public class MyService extends Service {
+public class NetMonitorService extends Service {
     private final static int WHAT_GETTRAFFIC_REPEAT = 1234;
     private long interval_getTraffic = 1000;
     NotificationManager notificationManager;
@@ -43,7 +43,7 @@ public class MyService extends Service {
             return false;
         }
     });
-    public MyService() {
+    public NetMonitorService() {
     }
 
     @Override
@@ -138,10 +138,6 @@ public class MyService extends Service {
 
     String last_speedDownText;
     public void refreshNotification(String speedDownText,String speedUpText){
-        // 检查是否需要重新生成小icon
-        if(!speedDownText.equals(last_speedDownText))
-        builder.setSmallIcon(Icon.createWithBitmap(BitmapUtils.createBitmapWithText(speedDownText)));
-
         getText(speedDownText, speedUpText);
 
         notification = builder.build();
@@ -163,6 +159,16 @@ public class MyService extends Service {
             }
         }else {
             title = "无网络";
+            speedDownText = "0B";
+            speedUpText = "0B";
+        }
+        // 检查是否需要重新生成小icon
+        if(!speedDownText.equals(last_speedDownText)){
+            if (title.equals("无网络")){
+                builder.setSmallIcon(Icon.createWithBitmap(BitmapUtils.createBitmapWithText("0KB")));
+            }else {
+                builder.setSmallIcon(Icon.createWithBitmap(BitmapUtils.createBitmapWithText(speedDownText)));
+            }
         }
 
         builder.setContentTitle(title);
