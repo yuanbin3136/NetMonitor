@@ -8,6 +8,9 @@ description
 ###大标题
 ####
 ####4个#号
+![baidu](http://www.baidu.com/img/bdlogo.gif "百度logo")  
+![baidu](https://github.com/yuanbin3136/NetMonitor/raw/master/app/src/main/res/mipmap-xxhdpi/pic_notif.png "百度logo")  
+
 
 readme的用法
 http://blog.csdn.net/kaitiren/article/details/38513715
