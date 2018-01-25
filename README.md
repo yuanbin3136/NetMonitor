@@ -9,7 +9,7 @@ description
 ####
 ####4个#号
 ![baidu](http://www.baidu.com/img/bdlogo.gif "百度logo")  
-![baidu](https://github.com/yuanbin3136/NetMonitor/raw/master/app/src/main/res/mipmap-xxhdpi/pic_notif.png "百度logo")  
+![png](https://github.com/yuanbin3136/NetMonitor/raw/master/app/src/main/res/mipmap-xxhdpi/pic_notif.png "““”“")  
 
 
 readme的用法
