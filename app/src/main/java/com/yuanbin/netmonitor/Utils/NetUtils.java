@@ -1,19 +1,28 @@
 package com.yuanbin.netmonitor.Utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 /**
  * Created by John on 2017/8/6.
@@ -183,4 +192,11 @@ public class NetUtils {
         return wifiManager.getConnectionInfo();
     }
 
+    // 8.0以后SSID这样拿
+    public static String getSSID_8(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        String ssid = networkInfo.getExtraInfo();
+        return ssid;
+    }
 }

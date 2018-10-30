@@ -1,16 +1,22 @@
 package com.yuanbin.netmonitor;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.yuanbin.netmonitor.Utils.L;
+import com.yuanbin.netmonitor.Utils.NetUtils;
+import com.yuanbin.netmonitor.Utils.PermissionUtils;
 import com.yuanbin.netmonitor.Utils.SPUtils;
 import com.yuanbin.netmonitor.Utils.ServiceUtils;
 import com.yuanbin.netmonitor.Utils.WeakHandler;
@@ -22,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean handleMessage(Message msg) {
             switch (msg.what){
                 case 1111:
-                    L.out("handleMessage " + 1111);
+                    L.o("handleMessage " + 1111);
                     mHandler.sendEmptyMessageDelayed(1111,5000);
                     break;
             }
@@ -31,15 +37,52 @@ public class MainActivity extends AppCompatActivity {
     });
 
     Switch sw_speed_noti,sw_boot;
+    Button btn_getpermission;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        L.out("MainActivity onCreate");
+        L.o("MainActivity onCreate");
 
         initView();
         initData();
         initLis();
+
+        PermissionUtils.getLocatePermission(this,REQUESTCODE_GPS);
+    }
+    public final static int REQUESTCODE_GPS = 1;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        L.i(this.getClass().toString(),requestCode + " " + resultCode);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        L.o(1114);
+        switch (requestCode) {
+            case REQUESTCODE_GPS: {
+                // If request is cancelled, the result arrays are empty.
+                L.o(grantResults.length);
+                L.o(grantResults.length > 0 ? grantResults[0] : -1);
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted
+                } else {
+                    // permission denied
+                    L.showT("获取WiFi名称需要定位权限");
+                    btn_getpermission.setVisibility(View.VISIBLE);
+                    btn_getpermission.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            PermissionUtils.getLocatePermission(MainActivity.this,REQUESTCODE_GPS);
+                        }
+                    });
+                }
+                return;
+            }
+        }
     }
 
     private void initLis() {
@@ -85,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         sw_speed_noti  = (Switch) findViewById(R.id.sw_speed_noti);
         sw_boot  = (Switch) findViewById(R.id.sw_boot);
+        btn_getpermission = (Button) findViewById(R.id.btn_getpermission);
     }
 
     private void startMonitorService(){
@@ -101,25 +145,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        L.out("MainActivity onStart");
+        L.o("MainActivity onStart");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        L.out("MainActivity onResume");
+        L.o("MainActivity onResume");
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        L.out("MainActivity onStop");
+        L.o("MainActivity onStop");
         super.onStop();
     }
 
     @Override
     protected void onPause() {
-        L.out("MainActivity onPause");
+        L.o("MainActivity onPause");
         mHandler.removeCallbacksAndMessages(null);
         super.onPause();
     }
@@ -127,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        L.out("MainActivity onDestroy");
+        L.o("MainActivity onDestroy");
 //        stopMyService();
     }
     @Override
